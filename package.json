@@ -4,6 +4,9 @@
   "description": "Room-314 Smart Kirana Store POS & Inventory Management System",
   "private": true,
   "main": "server/app.js",
+  "engines": {
+    "node": ">=20.0.0"
+  },
   "scripts": {
     "start": "node server/app.js",
     "build": "vite build",
@@ -17,7 +20,7 @@
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
-    "better-sqlite3": "^11.6.0",
+    "better-sqlite3": "^13.2.0",
     "concurrently": "^8.2.2",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
