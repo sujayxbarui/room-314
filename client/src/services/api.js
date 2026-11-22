@@ -1,4 +1,5 @@
-const BASE_URL = '/api';
+const API_HOST = (typeof import.meta !== 'undefined' && import.meta.env?.VITE_API_URL) || '';
+const BASE_URL = API_HOST ? `${API_HOST.replace(/\/$/, '')}/api` : '/api';
 
 function getToken() {
   return localStorage.getItem('token');

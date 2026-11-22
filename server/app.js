@@ -63,15 +63,52 @@ app.use('/api/reports', reportRoutes);
 app.use('/api/ai', aiRoutes);
 app.use('/api/settings', settingsRoutes);
 
-// Serve static frontend build if available
-const clientDistPath = path.join(__dirname, '..', 'client', 'dist');
-if (fs.existsSync(clientDistPath)) {
-  app.use(express.static(clientDistPath));
+// 404 handler for unmatched API routes
+app.all('/api/*', (req, res) => {
+  res.status(404).json({ error: `API route not found: ${req.method} ${req.originalUrl}` });
+});
+
+// Serve static frontend build
+const candidateDistPaths = [
+  path.resolve(__dirname, '..', 'client', 'dist'),
+  path.resolve(__dirname, 'client', 'dist'),
+  path.resolve(process.cwd(), 'client', 'dist'),
+  path.resolve(process.cwd(), 'dist'),
+];
+
+let resolvedDistPath = candidateDistPaths.find((p) => fs.existsSync(p));
+
+if (resolvedDistPath) {
+  console.log(`📦 Serving frontend from: ${resolvedDistPath}`);
+  app.use(express.static(resolvedDistPath));
   app.get('*', (req, res, next) => {
     if (req.path.startsWith('/api') || req.path.startsWith('/uploads')) {
       return next();
     }
-    res.sendFile(path.join(clientDistPath, 'index.html'));
+    res.sendFile(path.join(resolvedDistPath, 'index.html'));
+  });
+} else {
+  console.warn('⚠️ No client build found in candidate paths. Frontend will not be served directly by Express.');
+  app.get('*', (req, res, next) => {
+    if (req.path.startsWith('/api') || req.path.startsWith('/uploads')) {
+      return next();
+    }
+    res.status(404).send(`
+      <!DOCTYPE html>
+      <html>
+        <head><title>Room-314 — Setup Required</title></head>
+        <body style="font-family: system-ui, sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; background: #0f172a; color: #f8fafc;">
+          <div style="text-align: center; max-width: 500px; padding: 2rem; background: #1e293b; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.5);">
+            <h2 style="color: #14b8a6; margin-top: 0;">Room-314 POS Backend Running</h2>
+            <p style="color: #94a3b8; font-size: 14px;">The API is live, but the client frontend build was not found on this server.</p>
+            <p style="font-size: 13px; background: #0f172a; padding: 12px; border-radius: 6px; font-family: monospace; color: #38bdf8;">
+              npm run build
+            </p>
+            <p style="color: #64748b; font-size: 12px;">If running separately, open the Vite dev server at <strong>http://localhost:5173</strong></p>
+          </div>
+        </body>
+      </html>
+    `);
   });
 }
 

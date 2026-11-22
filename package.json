@@ -3,7 +3,10 @@
   "version": "1.0.0",
   "description": "POS & Inventory Management System for Room-314 Kirana Store",
   "private": true,
+  "main": "server/app.js",
   "scripts": {
+    "start": "cd server && node app.js",
+    "build": "cd client && npm install && npm run build",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "server": "cd server && node app.js",
     "client": "cd client && npm run dev",

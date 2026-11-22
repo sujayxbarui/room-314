@@ -112,40 +112,24 @@ export default function Login() {
 
         {/* Login Credentials hint */}
         <div className="mt-8 pt-6 border-t border-navy-100 text-xs text-navy-500 space-y-2">
-          <p className="font-medium text-navy-700">Quick Login Credentials:</p>
-          <div
-            onClick={() => {
-              setEmail('owner@room314.com');
-              setPassword('admin123');
-              setIsRegistering(false);
-            }}
-            className="flex justify-between items-center bg-teal-50/60 hover:bg-teal-50 p-2 rounded border border-teal-200 cursor-pointer transition"
-            title="Click to fill Admin credentials"
-          >
-            <div>
-              <span className="font-semibold text-teal-900 block">Store Owner / Admin</span>
-              <span className="text-teal-700 font-mono text-[11px]">owner@room314.com</span>
-            </div>
-            <span className="font-mono text-teal-800 bg-teal-100 px-1.5 py-0.5 rounded text-[11px]">admin123</span>
-          </div>
-
+          <p className="font-medium text-navy-700">Quick Staff Login:</p>
           <div
             onClick={() => {
               setEmail('staff@room314.com');
               setPassword('staff123');
               setIsRegistering(false);
             }}
-            className="flex justify-between items-center bg-amber-50/60 hover:bg-amber-50 p-2 rounded border border-amber-200 cursor-pointer transition"
+            className="flex justify-between items-center bg-amber-50/60 hover:bg-amber-50 p-2.5 rounded-lg border border-amber-200 cursor-pointer transition"
             title="Click to fill Staff credentials"
           >
             <div>
-              <span className="font-semibold text-amber-900 block">Store Cashier / Staff (Restricted)</span>
+              <span className="font-semibold text-amber-900 block">Store Cashier / Staff</span>
               <span className="text-amber-700 font-mono text-[11px]">staff@room314.com</span>
             </div>
-            <span className="font-mono text-amber-800 bg-amber-100 px-1.5 py-0.5 rounded text-[11px]">staff123</span>
+            <span className="font-mono text-amber-800 bg-amber-100 px-2 py-0.5 rounded text-[11px] font-semibold">staff123</span>
           </div>
           <p className="text-[11px] text-navy-400 text-center pt-1">
-            Staff can make sales and returns. Price, inventory, and stock editing are locked to Admin.
+            Staff can make sales and returns. Store Owner / Administrator credentials must be entered manually.
           </p>
         </div>
       </div>
