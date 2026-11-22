@@ -1,0 +1,25 @@
+{
+  "date": "2026-10-31",
+  "archived_at": "2026-10-30T19:33:16.428Z",
+  "transaction_count": 1,
+  "total_items_sold": 2,
+  "total_sales_inr": 70,
+  "estimated_profit_inr": 18,
+  "sales": [
+    {
+      "receipt_number": "R314-20261031-0001",
+      "time": "2026-10-30 18:46:30",
+      "total": 70,
+      "payment_method": "upi",
+      "customer": "Walk-in",
+      "items": [
+        {
+          "name": "Act II Golden Crunch Popcorn 60g",
+          "quantity": 2,
+          "unit_price": 35,
+          "line_total": 70
+        }
+      ]
+    }
+  ]
+}

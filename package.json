@@ -1,0 +1,20 @@
+{
+  "name": "room-314",
+  "version": "1.0.0",
+  "description": "POS & Inventory Management System for Room-314 Kirana Store",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "server": "cd server && node app.js",
+    "client": "cd client && npm run dev",
+    "migrate": "cd server && node migrations/run.js",
+    "seed": "cd server && node seeds/demo.js",
+    "backup": "node backups/backup.js",
+    "test": "node server/test/test-runner.js",
+    "install:all": "npm install && cd server && npm install && cd ../client && npm install"
+  },
+  "dependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
+

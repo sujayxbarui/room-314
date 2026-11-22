@@ -1,0 +1,23 @@
+{
+  "updated_at": "2026-10-30T19:33:16.429Z",
+  "all_time": {
+    "total_sales": 1085,
+    "total_orders": 18,
+    "cash_sales": 0,
+    "upi_sales": 1085,
+    "first_date": "2026-10-30",
+    "latest_date": "2026-10-31"
+  },
+  "dates": [
+    {
+      "date": "2026-10-31",
+      "orders": 1,
+      "total": 70
+    },
+    {
+      "date": "2026-10-30",
+      "orders": 17,
+      "total": 1015
+    }
+  ]
+}

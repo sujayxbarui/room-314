@@ -1,0 +1,25 @@
+Receipt,Time,Customer,PaymentMethod,ItemName,Quantity,UnitPrice,LineTotal
+"R314-20261030-0001","2026-10-30 00:08:16","Walk-in","upi","Maggi ",2,20,40
+"R314-20261030-0001","2026-10-30 00:08:16","Walk-in","upi","Bingo Tedhe Medhe Chatpata Twist ",1,20,20
+"R314-20261030-0002","2026-10-30 00:08:55","Walk-in","upi","Maggi ",2,20,40
+"R314-20261030-0002","2026-10-30 00:08:55","Walk-in","upi","Amul Cheese Slices ",1,20,20
+"R314-20261030-0002","2026-10-30 00:08:55","Walk-in","upi","Maggi Pazzta Cheesy Tomato ",1,35,35
+"R314-20261030-0003","2026-10-30 00:09:10","Walk-in","upi","Bingo Nachos ",1,50,50
+"R314-20261030-0003","2026-10-30 00:09:10","Walk-in","upi","Amul Cheese Slices ",2,20,40
+"R314-20261030-0004","2026-10-30 00:09:17","Walk-in","upi","Maggi ",2,20,40
+"R314-20261030-0005","2026-10-30 00:09:30","Walk-in","upi","Mad Angles Achaari Masti ",1,50,50
+"R314-20261030-0006","2026-10-30 00:09:38","Walk-in","upi","Takatak ",1,25,25
+"R314-20261030-0007","2026-10-30 00:09:49","Walk-in","upi","Bingo Tedhe Medhe Chatpata Twist ",1,20,20
+"R314-20261030-0008","2026-10-30 00:09:59","Walk-in","upi","Bingo Nachos ",1,50,50
+"R314-20261030-0008","2026-10-30 00:09:59","Walk-in","upi","Bingo Tedhe Medhe Chatpata Twist ",1,20,20
+"R314-20261030-0009","2026-10-30 00:10:10","Walk-in","upi","Takatak ",1,25,25
+"R314-20261030-0009","2026-10-30 00:10:10","Walk-in","upi","Bingo Tedhe Medhe Masala Tadka ",1,20,20
+"R314-20261030-0010","2026-10-30 00:10:17","Walk-in","upi","Bingo Nachos ",1,50,50
+"R314-20261030-0011","2026-10-30 00:10:32","Walk-in","upi","Mad Angles Achaari Masti ",1,50,50
+"R314-20261030-0011","2026-10-30 00:10:32","Walk-in","upi","Bingo Tedhe Medhe Chatpata Twist ",2,20,40
+"R314-20261030-0012","2026-10-30 00:10:45","Walk-in","upi","Mad Angles Achaari Masti ",1,50,50
+"R314-20261030-0012","2026-10-30 00:10:45","Walk-in","upi","Bingo Tedhe Medhe Masala Tadka ",1,20,20
+"R314-20261030-0013","2026-10-30 00:10:59","Walk-in","upi","Bingo Tedhe Medhe Chatpata Twist ",1,20,20
+"R314-20261030-0013","2026-10-30 00:10:59","Walk-in","upi","Crax Cheese Balls ",1,60,60
+"R314-20261030-0014","2026-10-30 00:12:03","Walk-in","upi","Amul Cheese Slices ",1,20,20
+"R314-20261030-0015","2026-10-30 13:39:29","Walk-in","upi","Act II Golden Crunch Popcorn 60g",2,35,70

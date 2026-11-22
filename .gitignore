@@ -1,0 +1,17 @@
+node_modules/
+.env
+database/*.db
+database/*.db-wal
+database/*.db-shm
+uploads/*
+!uploads/.gitkeep
+backups/*.db
+dist/
+dist-macos/
+*.dmg
+.DS_Store
+client/dist/
+
+# Local compiled binaries
+scripts/Room-314
+scripts/test-objc
