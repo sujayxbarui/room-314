@@ -8,6 +8,7 @@ const run = db.transaction(() => {
   console.log('1. Creating demo users...');
   const salt = bcrypt.genSaltSync(10);
   const passwordHash = bcrypt.hashSync('admin123', salt);
+  const staffHash = bcrypt.hashSync('staff123', salt);
 
   const insertUser = db.prepare(`
     INSERT OR REPLACE INTO users (id, name, email, password_hash, role, is_active)
@@ -16,7 +17,8 @@ const run = db.transaction(() => {
 
   insertUser.run(1, 'Sujay (Owner)', 'owner@room314.com', passwordHash, 'admin');
   insertUser.run(2, 'Co-founder', 'partner@room314.com', passwordHash, 'admin');
-  console.log('   ✅ 2 users created: owner@room314.com / admin123, partner@room314.com / admin123');
+  insertUser.run(3, 'Store Cashier', 'staff@room314.com', staffHash, 'staff');
+  console.log('   ✅ 3 users created: owner@room314.com / admin123, partner@room314.com / admin123, staff@room314.com / staff123');
 
   // 2. Categories
   console.log('2. Creating categories & subcategories...');

@@ -1,6 +1,6 @@
 const express = require('express');
 const Product = require('../models/Product');
-const { authenticate } = require('../middleware/auth');
+const { authenticate, requireAdmin } = require('../middleware/auth');
 
 const router = express.Router();
 router.use(authenticate);
@@ -83,8 +83,8 @@ router.get('/:id', (req, res, next) => {
   }
 });
 
-// POST /api/products
-router.post('/', (req, res, next) => {
+// POST /api/products (Admin only)
+router.post('/', requireAdmin, (req, res, next) => {
   try {
     const { name, selling_price } = req.body;
     if (!name || name.trim() === '') {
@@ -127,8 +127,8 @@ router.post('/', (req, res, next) => {
   }
 });
 
-// POST /api/products/bulk
-router.post('/bulk', (req, res, next) => {
+// POST /api/products/bulk (Admin only)
+router.post('/bulk', requireAdmin, (req, res, next) => {
   try {
     const { products } = req.body;
     if (!Array.isArray(products) || products.length === 0) {
@@ -142,8 +142,8 @@ router.post('/bulk', (req, res, next) => {
   }
 });
 
-// PUT /api/products/:id
-router.put('/:id', (req, res, next) => {
+// PUT /api/products/:id (Admin only)
+router.put('/:id', requireAdmin, (req, res, next) => {
   try {
     const id = parseInt(req.params.id, 10);
     const existing = Product.findById(id);
@@ -158,8 +158,8 @@ router.put('/:id', (req, res, next) => {
   }
 });
 
-// DELETE /api/products/:id (Archive)
-router.delete('/:id', (req, res, next) => {
+// DELETE /api/products/:id (Archive - Admin only)
+router.delete('/:id', requireAdmin, (req, res, next) => {
   try {
     const id = parseInt(req.params.id, 10);
     const product = Product.findById(id);
@@ -174,8 +174,8 @@ router.delete('/:id', (req, res, next) => {
   }
 });
 
-// DELETE /api/products/:id/permanent (Permanent delete)
-router.delete('/:id/permanent', (req, res, next) => {
+// DELETE /api/products/:id/permanent (Permanent delete - Admin only)
+router.delete('/:id/permanent', requireAdmin, (req, res, next) => {
   try {
     const id = parseInt(req.params.id, 10);
     const db = require('../db');

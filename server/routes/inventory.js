@@ -1,7 +1,7 @@
 const express = require('express');
 const db = require('../db');
 const Inventory = require('../models/Inventory');
-const { authenticate } = require('../middleware/auth');
+const { authenticate, requireAdmin } = require('../middleware/auth');
 
 const router = express.Router();
 router.use(authenticate);
@@ -25,8 +25,8 @@ router.get('/', (req, res, next) => {
   }
 });
 
-// POST /api/inventory/purchase - Record stock purchase
-router.post('/purchase', (req, res, next) => {
+// POST /api/inventory/purchase - Record stock purchase (Admin only)
+router.post('/purchase', requireAdmin, (req, res, next) => {
   try {
     const { supplier, purchase_date, invoice_number, notes, items } = req.body;
 
@@ -51,8 +51,8 @@ router.post('/purchase', (req, res, next) => {
   }
 });
 
-// POST /api/inventory/adjust - Stock adjustment (damage, correction, etc.)
-router.post('/adjust', (req, res, next) => {
+// POST /api/inventory/adjust - Stock adjustment (Admin only)
+router.post('/adjust', requireAdmin, (req, res, next) => {
   try {
     const { product_id, quantity_change, reason, notes } = req.body;
 

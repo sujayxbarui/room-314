@@ -6,7 +6,7 @@ const Inventory = require('../models/Inventory');
 const db = require('../db');
 const { archiveDailySales, updateAllTimeArchive, getSalesFolderInfo, projectSalesDir } = require('../services/salesArchiver');
 const { getLocalDateString } = require('../utils/date');
-const { authenticate } = require('../middleware/auth');
+const { authenticate, requireAdmin } = require('../middleware/auth');
 
 const router = express.Router();
 router.use(authenticate);
@@ -132,9 +132,9 @@ router.get('/folder-info', (req, res) => {
   res.json(getSalesFolderInfo());
 });
 
-// POST /api/reports/reset-day?date=YYYY-MM-DD
+// POST /api/reports/reset-day?date=YYYY-MM-DD (Admin only)
 // Allows manually resetting today's sales register from dashboard (safely archives to sales_records first)
-router.post('/reset-day', (req, res, next) => {
+router.post('/reset-day', requireAdmin, (req, res, next) => {
   try {
     const targetDate = req.body?.date || req.query.date || getLocalDateString();
 

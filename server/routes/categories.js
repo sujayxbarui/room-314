@@ -1,6 +1,6 @@
 const express = require('express');
 const Category = require('../models/Category');
-const { authenticate } = require('../middleware/auth');
+const { authenticate, requireAdmin } = require('../middleware/auth');
 
 const router = express.Router();
 router.use(authenticate);
@@ -38,8 +38,8 @@ router.get('/:id', (req, res, next) => {
   }
 });
 
-// POST /api/categories
-router.post('/', (req, res, next) => {
+// POST /api/categories (Admin only)
+router.post('/', requireAdmin, (req, res, next) => {
   try {
     const { name, parent_id } = req.body;
     if (!name || name.trim() === '') {
@@ -52,8 +52,8 @@ router.post('/', (req, res, next) => {
   }
 });
 
-// PUT /api/categories/:id
-router.put('/:id', (req, res, next) => {
+// PUT /api/categories/:id (Admin only)
+router.put('/:id', requireAdmin, (req, res, next) => {
   try {
     const { name } = req.body;
     if (!name || name.trim() === '') {
@@ -66,8 +66,8 @@ router.put('/:id', (req, res, next) => {
   }
 });
 
-// DELETE /api/categories/:id
-router.delete('/:id', (req, res, next) => {
+// DELETE /api/categories/:id (Admin only)
+router.delete('/:id', requireAdmin, (req, res, next) => {
   try {
     const result = Category.delete(parseInt(req.params.id, 10));
     res.json(result);

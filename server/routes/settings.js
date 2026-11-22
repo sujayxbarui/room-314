@@ -4,7 +4,7 @@ const path = require('path');
 const multer = require('multer');
 const db = require('../db');
 const config = require('../config');
-const { authenticate } = require('../middleware/auth');
+const { authenticate, requireAdmin } = require('../middleware/auth');
 
 const router = express.Router();
 
@@ -13,8 +13,8 @@ const upload = multer({
   limits: { fileSize: 100 * 1024 * 1024 }, // 100MB
 });
 
-// POST /api/settings/reset-data - Clear demo sales or reset catalog to fresh shop
-router.post('/reset-data', authenticate, (req, res, next) => {
+// POST /api/settings/reset-data - Clear demo sales or reset catalog to fresh shop (Admin only)
+router.post('/reset-data', authenticate, requireAdmin, (req, res, next) => {
   try {
     const { action } = req.body; // 'clear_sales' | 'clear_all'
 
@@ -81,8 +81,8 @@ router.get('/backup/download', authenticate, (req, res, next) => {
   }
 });
 
-// POST /api/settings/backup/restore - Restore/Import shop database from uploaded .db file
-router.post('/backup/restore', authenticate, upload.single('database_file'), (req, res, next) => {
+// POST /api/settings/backup/restore - Restore/Import shop database from uploaded .db file (Admin only)
+router.post('/backup/restore', authenticate, requireAdmin, upload.single('database_file'), (req, res, next) => {
   try {
     if (!req.file) {
       return res.status(400).json({ error: 'No database file provided' });
@@ -157,8 +157,8 @@ router.get('/', (req, res, next) => {
   }
 });
 
-// PUT /api/settings
-router.put('/', (req, res, next) => {
+// PUT /api/settings (Admin only)
+router.put('/', requireAdmin, (req, res, next) => {
   try {
     const updates = req.body;
     const updateStmt = db.prepare(`

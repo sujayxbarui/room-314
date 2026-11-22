@@ -56,12 +56,13 @@ npm run dev
 
 The app will open at **http://localhost:5173**
 
-### Demo Accounts (after running seed)
+### Demo Accounts & User Roles (after running seed)
 
-| Role | Email | Password |
-|---|---|---|
-| Owner | owner@room314.com | admin123 |
-| Partner | partner@room314.com | admin123 |
+| Role | Email | Password | Permissions |
+|---|---|---|---|
+| **Owner (Admin)** | `owner@room314.com` | `admin123` | Full access: sales, returns, product management, stock purchases, adjustments, settings, resets |
+| **Partner (Admin)** | `partner@room314.com` | `admin123` | Full access: co-owner privileges |
+| **Cashier (Staff)** | `staff@room314.com` | `staff123` | **Restricted access:** Can make new sales and process returns. Can view all data (catalogue, inventory, reports, dashboard), but **cannot edit** products, prices, stock, inventory, or settings. |
 
 ### Access from iPhone/Android
 

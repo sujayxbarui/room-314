@@ -237,18 +237,32 @@ function ensureSchema(db) {
 
   db.exec(schemaSql);
 
-  // If no users exist, seed default admin accounts
+  // If no users exist, seed default admin & staff accounts
   const userCount = db.prepare('SELECT count(*) as count FROM users').get();
   if (!userCount || userCount.count === 0) {
-    console.log('Seeding default admin accounts...');
+    console.log('Seeding default admin & staff accounts...');
     const salt = bcrypt.genSaltSync(10);
     const passwordHash = bcrypt.hashSync('admin123', salt);
+    const staffHash = bcrypt.hashSync('staff123', salt);
     const insertUser = db.prepare(`
       INSERT INTO users (id, name, email, password_hash, role, is_active)
-      VALUES (?, ?, ?, ?, 'admin', 1)
+      VALUES (?, ?, ?, ?, ?, 1)
     `);
-    insertUser.run(1, 'Sujay (Owner)', 'owner@room314.com', passwordHash);
-    insertUser.run(2, 'Co-founder', 'partner@room314.com', passwordHash);
+    insertUser.run(1, 'Sujay (Owner)', 'owner@room314.com', passwordHash, 'admin');
+    insertUser.run(2, 'Co-founder', 'partner@room314.com', passwordHash, 'admin');
+    insertUser.run(3, 'Store Cashier', 'staff@room314.com', staffHash, 'staff');
+  }
+
+  // Ensure staff user exists in existing database
+  const staffUser = db.prepare('SELECT id FROM users WHERE email = ?').get('staff@room314.com');
+  if (!staffUser) {
+    console.log('Adding Store Cashier account (staff@room314.com)...');
+    const salt = bcrypt.genSaltSync(10);
+    const staffHash = bcrypt.hashSync('staff123', salt);
+    db.prepare(`
+      INSERT INTO users (name, email, password_hash, role, is_active)
+      VALUES (?, ?, ?, 'staff', 1)
+    `).run('Store Cashier', 'staff@room314.com', staffHash);
   }
 
   // If no categories exist, seed core grocery categories

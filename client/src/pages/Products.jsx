@@ -11,7 +11,9 @@ import {
   Trash2,
   Archive,
   RefreshCw,
+  Lock,
 } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
 import { api } from '../services/api';
 import { formatCurrency } from '../utils/formatters';
 import Button from '../components/ui/Button';
@@ -32,6 +34,7 @@ export default function Products() {
   const [archiveModalOpen, setArchiveModalOpen] = useState(false);
   const [productToArchive, setProductToArchive] = useState(null);
 
+  const { isAdmin } = useAuth();
   const navigate = useNavigate();
 
   const fetchCategories = async () => {
@@ -131,29 +134,51 @@ export default function Products() {
           <p className="text-sm text-navy-500">Manage all packaged food items, prices, and stock levels</p>
         </div>
         <div className="flex items-center gap-2">
-          {products.length > 0 && (
-            <Button
-              variant="ghost"
-              size="sm"
-              icon={Trash2}
-              onClick={handleClearAllProducts}
-              className="text-red-600 hover:text-red-700 hover:bg-red-50 text-xs font-semibold"
-            >
-              Clear All Products
-            </Button>
+          {isAdmin ? (
+            <>
+              {products.length > 0 && (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  icon={Trash2}
+                  onClick={handleClearAllProducts}
+                  className="text-red-600 hover:text-red-700 hover:bg-red-50 text-xs font-semibold"
+                >
+                  Clear All Products
+                </Button>
+              )}
+              <Link to="/products/import">
+                <Button variant="secondary" icon={Upload}>
+                  Import Blinkit
+                </Button>
+              </Link>
+              <Link to="/products/add">
+                <Button variant="primary" icon={Plus}>
+                  Add Product
+                </Button>
+              </Link>
+            </>
+          ) : (
+            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-amber-50 text-amber-800 border border-amber-200">
+              <Lock size={13} /> View Only Mode (Staff)
+            </span>
           )}
-          <Link to="/products/import">
-            <Button variant="secondary" icon={Upload}>
-              Import Blinkit
-            </Button>
-          </Link>
-          <Link to="/products/add">
-            <Button variant="primary" icon={Plus}>
-              Add Product
-            </Button>
-          </Link>
         </div>
       </div>
+
+      {!isAdmin && (
+        <div className="bg-amber-50/80 border border-amber-200 rounded-lg px-4 py-2.5 flex items-center justify-between text-xs text-amber-900">
+          <div className="flex items-center gap-2">
+            <Lock size={14} className="text-amber-600 flex-shrink-0" />
+            <span>
+              <strong>Staff Permissions:</strong> You can view all catalogue details, live stock, and prices. Adding, modifying, or deleting products requires an Administrator account.
+            </span>
+          </div>
+          <span className="font-semibold uppercase tracking-wider text-[10px] bg-amber-100 text-amber-800 px-2 py-0.5 rounded border border-amber-300">
+            Read Only
+          </span>
+        </div>
+      )}
 
       {/* Filter & Search Bar */}
       <div className="bg-white p-4 rounded-lg border border-navy-200 shadow-sm flex flex-col md:flex-row items-center justify-between gap-3">
@@ -225,7 +250,7 @@ export default function Products() {
                   <th className="px-4 py-3 text-right">Cost Price</th>
                   <th className="px-4 py-3 text-center">Stock</th>
                   <th className="px-4 py-3 text-center">Status</th>
-                  <th className="px-4 py-3 text-right">Actions</th>
+                  <th className="px-4 py-3 text-right">{isAdmin ? 'Actions' : 'Access'}</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-navy-100">
@@ -250,24 +275,30 @@ export default function Products() {
                       <StockBadge stock={p.stock} threshold={p.low_stock_threshold} />
                     </td>
                     <td className="px-4 py-3 text-right">
-                      <div className="flex items-center justify-end gap-1">
-                        <button
-                          type="button"
-                          onClick={() => navigate(`/products/edit/${p.id}`)}
-                          className="p-1.5 rounded hover:bg-navy-100 text-navy-600 hover:text-navy-900 transition"
-                          title="Edit Product"
-                        >
-                          <Edit2 size={15} />
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => confirmArchive(p)}
-                          className="p-1.5 rounded hover:bg-red-50 text-navy-400 hover:text-red-600 transition"
-                          title="Archive Product"
-                        >
-                          <Archive size={15} />
-                        </button>
-                      </div>
+                      {isAdmin ? (
+                        <div className="flex items-center justify-end gap-1">
+                          <button
+                            type="button"
+                            onClick={() => navigate(`/products/edit/${p.id}`)}
+                            className="p-1.5 rounded hover:bg-navy-100 text-navy-600 hover:text-navy-900 transition"
+                            title="Edit Product"
+                          >
+                            <Edit2 size={15} />
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => confirmArchive(p)}
+                            className="p-1.5 rounded hover:bg-red-50 text-navy-400 hover:text-red-600 transition"
+                            title="Archive Product"
+                          >
+                            <Archive size={15} />
+                          </button>
+                        </div>
+                      ) : (
+                        <span className="inline-flex items-center gap-1 text-[11px] font-medium text-navy-400 bg-navy-50 px-2 py-0.5 rounded border border-navy-200">
+                          <Lock size={11} /> Locked
+                        </span>
+                      )}
                     </td>
                   </tr>
                 ))}

@@ -11,6 +11,7 @@ const Sale = require('../models/Sale');
 const Inventory = require('../models/Inventory');
 const Return = require('../models/Return');
 const Report = require('../models/Report');
+const { getLocalDateString } = require('../utils/date');
 const { suggestCategory } = require('../services/categorization');
 const { generateReceiptText, generateShareLink } = require('../services/whatsapp');
 
@@ -35,12 +36,18 @@ console.log('==================================================\n');
 
 // 1. User & Auth
 console.log('--- 1. Authentication & Users ---');
-test('Find seeded user by email and verify password', () => {
+test('Find seeded admin user and verify password & role', () => {
   const user = User.findByEmail('owner@room314.com');
-  assert(user, 'User should exist');
-  assert(user.name.includes('Owner'), 'User name matches');
-  const valid = User.verifyPassword('admin123', user.password_hash);
-  assert(valid, 'Password matches');
+  assert(user, 'Admin user should exist');
+  assert.strictEqual(user.role, 'admin', 'Admin user role is admin');
+  assert(User.verifyPassword('admin123', user.password_hash), 'Admin password matches');
+});
+
+test('Find seeded staff user and verify password & role', () => {
+  const staff = User.findByEmail('staff@room314.com');
+  assert(staff, 'Staff user should exist');
+  assert.strictEqual(staff.role, 'staff', 'Staff user role is staff');
+  assert(User.verifyPassword('staff123', staff.password_hash), 'Staff password matches');
 });
 
 // 2. Intelligent Categorization
@@ -241,7 +248,7 @@ test('Process return of item with restocking into inventory', () => {
 // 7. Reports & Profit Calculation
 console.log('\n--- 7. Reports & Gross Profit Calculations ---');
 test('Verify daily sales report and gross margin calculations', () => {
-  const todayStr = new Date().toISOString().slice(0, 10);
+  const todayStr = getLocalDateString();
   const report = Report.dailySales(todayStr);
 
   assert(report.total_sales > 0, 'Total sales > 0');
@@ -259,7 +266,7 @@ test('Verify daily sales report and gross margin calculations', () => {
 });
 
 test('Verify best-sellers report', () => {
-  const todayStr = new Date().toISOString().slice(0, 10);
+  const todayStr = getLocalDateString();
   const best = Report.bestSellers(todayStr, todayStr, 5);
   assert(Array.isArray(best), 'Best sellers returns an array');
   assert(best.length > 0, 'At least one best seller found');

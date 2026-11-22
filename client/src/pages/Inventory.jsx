@@ -9,7 +9,9 @@ import {
   SlidersHorizontal,
   RefreshCw,
   TrendingUp,
+  Lock,
 } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
 import { api } from '../services/api';
 import { formatCurrency } from '../utils/formatters';
 import Button from '../components/ui/Button';
@@ -19,6 +21,7 @@ import StockBadge from '../components/shared/StockBadge';
 import Spinner from '../components/ui/Spinner';
 
 export default function Inventory() {
+  const { isAdmin } = useAuth();
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
@@ -115,13 +118,33 @@ export default function Inventory() {
           <p className="text-sm text-navy-500">Live stock valuation, threshold monitoring, and adjustments</p>
         </div>
         <div className="flex items-center gap-2">
-          <Link to="/inventory/purchase">
-            <Button variant="primary" icon={Plus}>
-              + Add Stock to Products
-            </Button>
-          </Link>
+          {isAdmin ? (
+            <Link to="/inventory/purchase">
+              <Button variant="primary" icon={Plus}>
+                + Add Stock to Products
+              </Button>
+            </Link>
+          ) : (
+            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-amber-50 text-amber-800 border border-amber-200">
+              <Lock size={13} /> View Only Mode (Staff)
+            </span>
+          )}
         </div>
       </div>
+
+      {!isAdmin && (
+        <div className="bg-amber-50/80 border border-amber-200 rounded-lg px-4 py-2.5 flex items-center justify-between text-xs text-amber-900">
+          <div className="flex items-center gap-2">
+            <Lock size={14} className="text-amber-600 flex-shrink-0" />
+            <span>
+              <strong>Staff Permissions:</strong> Live stock valuation and quantities are view-only. Purchasing new inventory or performing stock corrections is restricted to store administrators.
+            </span>
+          </div>
+          <span className="font-semibold uppercase tracking-wider text-[10px] bg-amber-100 text-amber-800 px-2 py-0.5 rounded border border-amber-300">
+            Read Only
+          </span>
+        </div>
+      )}
 
       {/* Valuation Summary Card */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -207,7 +230,7 @@ export default function Inventory() {
                   <th className="px-4 py-3 text-center">In Stock</th>
                   <th className="px-4 py-3 text-right">Stock Valuation</th>
                   <th className="px-4 py-3 text-center">Status</th>
-                  <th className="px-4 py-3 text-right">Adjust</th>
+                  <th className="px-4 py-3 text-right">{isAdmin ? 'Adjust' : 'Access'}</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-navy-100">
@@ -235,13 +258,19 @@ export default function Inventory() {
                       <StockBadge stock={item.stock} threshold={item.low_stock_threshold} />
                     </td>
                     <td className="px-4 py-3 text-right">
-                      <button
-                        type="button"
-                        onClick={() => openAdjustModal(item)}
-                        className="text-xs font-semibold text-navy-600 hover:text-teal-700 bg-navy-50 hover:bg-teal-50 px-2 py-1 rounded border border-navy-200 transition"
-                      >
-                        Adjust
-                      </button>
+                      {isAdmin ? (
+                        <button
+                          type="button"
+                          onClick={() => openAdjustModal(item)}
+                          className="text-xs font-semibold text-navy-600 hover:text-teal-700 bg-navy-50 hover:bg-teal-50 px-2 py-1 rounded border border-navy-200 transition"
+                        >
+                          Adjust
+                        </button>
+                      ) : (
+                        <span className="inline-flex items-center gap-1 text-[11px] font-medium text-navy-400 bg-navy-50 px-2 py-0.5 rounded border border-navy-200">
+                          <Lock size={11} /> Locked
+                        </span>
+                      )}
                     </td>
                   </tr>
                 ))}

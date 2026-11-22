@@ -36,6 +36,28 @@ function ProtectedRoute({ children }) {
   return <Layout>{children}</Layout>;
 }
 
+function AdminRoute({ children, fallback = "/products" }) {
+  const { user, isLoading, isAdmin } = useAuth();
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-navy-50">
+        <Spinner size="lg" />
+      </div>
+    );
+  }
+
+  if (!user) {
+    return <Navigate to="/login" replace />;
+  }
+
+  if (!isAdmin) {
+    return <Navigate to={fallback} replace />;
+  }
+
+  return <Layout>{children}</Layout>;
+}
+
 export default function App() {
   return (
     <AuthProvider>
@@ -102,25 +124,25 @@ export default function App() {
         <Route
           path="/products/add"
           element={
-            <ProtectedRoute>
+            <AdminRoute fallback="/products">
               <AddProduct />
-            </ProtectedRoute>
+            </AdminRoute>
           }
         />
         <Route
           path="/products/edit/:id"
           element={
-            <ProtectedRoute>
+            <AdminRoute fallback="/products">
               <AddProduct />
-            </ProtectedRoute>
+            </AdminRoute>
           }
         />
         <Route
           path="/products/import"
           element={
-            <ProtectedRoute>
+            <AdminRoute fallback="/products">
               <ImportProducts />
-            </ProtectedRoute>
+            </AdminRoute>
           }
         />
         <Route
@@ -134,9 +156,9 @@ export default function App() {
         <Route
           path="/inventory/purchase"
           element={
-            <ProtectedRoute>
+            <AdminRoute fallback="/inventory">
               <StockPurchase />
-            </ProtectedRoute>
+            </AdminRoute>
           }
         />
         <Route

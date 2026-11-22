@@ -28,6 +28,25 @@ function authenticate(req, res, next) {
 }
 
 /**
+ * Require administrator role middleware.
+ * Enforces that only users with role === 'admin' can perform write/edit mutations
+ * on products, inventory stock, categories, and settings.
+ */
+function requireAdmin(req, res, next) {
+  if (!req.user) {
+    return res.status(401).json({ error: 'Authentication required. Please log in.' });
+  }
+
+  if (req.user.role !== 'admin') {
+    return res.status(403).json({
+      error: 'Permission Denied: Only administrators can modify products, inventory, prices, or store settings. Staff accounts have view, sell, and return permissions only.',
+    });
+  }
+
+  next();
+}
+
+/**
  * Optional authentication middleware.
  * Attaches user if valid token is present, but doesn't fail if missing/invalid.
  */
@@ -50,4 +69,4 @@ function optionalAuth(req, res, next) {
   next();
 }
 
-module.exports = { authenticate, optionalAuth };
+module.exports = { authenticate, requireAdmin, optionalAuth };

@@ -20,6 +20,7 @@ import {
   RotateCcw,
 } from 'lucide-react';
 import { api } from '../services/api';
+import { useAuth } from '../context/AuthContext';
 import { formatCurrency, getLocalDateString } from '../utils/formatters';
 import StatCard from '../components/shared/StatCard';
 import StockBadge from '../components/shared/StockBadge';
@@ -29,6 +30,7 @@ import Modal from '../components/ui/Modal';
 
 export default function Dashboard() {
   const navigate = useNavigate();
+  const { isAdmin } = useAuth();
   const [todayStr, setTodayStr] = useState(getLocalDateString());
   const [selectedDate, setSelectedDate] = useState(getLocalDateString());
   const [resetModalOpen, setResetModalOpen] = useState(false);
@@ -221,15 +223,17 @@ export default function Dashboard() {
             className="px-2.5 py-1 text-xs border border-navy-300 rounded-md font-mono bg-white focus:outline-none focus:ring-1 focus:ring-teal-500 text-navy-800"
           />
 
-          <button
-            type="button"
-            onClick={() => setResetModalOpen(true)}
-            className="px-2.5 py-1 rounded-md text-xs font-semibold text-rose-700 bg-rose-50 hover:bg-rose-100 border border-rose-200 transition-all flex items-center gap-1 shrink-0"
-            title="Reset this day's sales register to ₹0.00 (safely auto-archives to sales_records/ first)"
-          >
-            <RotateCcw size={12} />
-            Reset to ₹0
-          </button>
+          {isAdmin && (
+            <button
+              type="button"
+              onClick={() => setResetModalOpen(true)}
+              className="px-2.5 py-1 rounded-md text-xs font-semibold text-rose-700 bg-rose-50 hover:bg-rose-100 border border-rose-200 transition-all flex items-center gap-1 shrink-0"
+              title="Reset this day's sales register to ₹0.00 (safely auto-archives to sales_records/ first)"
+            >
+              <RotateCcw size={12} />
+              Reset to ₹0
+            </button>
+          )}
         </div>
       </div>
 

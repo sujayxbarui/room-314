@@ -87,13 +87,22 @@ export default function Sidebar({ isOpen, onClose }) {
         {/* User */}
         <div className="px-4 py-4 border-t border-navy-200">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-full bg-teal-100 text-teal-700 flex items-center justify-center text-sm font-semibold">
+            <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold ${
+              user?.role === 'admin' ? 'bg-teal-100 text-teal-700' : 'bg-amber-100 text-amber-700'
+            }`}>
               {user?.name?.charAt(0)?.toUpperCase() || 'U'}
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-navy-800 truncate">
-                {user?.name || 'User'}
-              </p>
+              <div className="flex items-center gap-1.5">
+                <p className="text-sm font-medium text-navy-800 truncate">
+                  {user?.name || 'User'}
+                </p>
+                <span className={`text-[10px] px-1.5 py-0.2 rounded font-semibold uppercase ${
+                  user?.role === 'admin' ? 'bg-teal-100 text-teal-800' : 'bg-amber-100 text-amber-800 border border-amber-300'
+                }`}>
+                  {user?.role === 'admin' ? 'Admin' : 'Staff'}
+                </span>
+              </div>
               <p className="text-xs text-navy-500 truncate">
                 {user?.email || ''}
               </p>

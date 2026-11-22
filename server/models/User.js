@@ -9,15 +9,16 @@ const User = {
    * @param {string} name
    * @param {string} email
    * @param {string} password - Plain text password
+   * @param {string} role - 'admin' | 'staff'
    * @returns {object} Created user (without password_hash)
    */
-  create(name, email, password) {
+  create(name, email, password, role = 'staff') {
     const hash = bcrypt.hashSync(password, SALT_ROUNDS);
     const stmt = db.prepare(`
-      INSERT INTO users (name, email, password_hash)
-      VALUES (?, ?, ?)
+      INSERT INTO users (name, email, password_hash, role)
+      VALUES (?, ?, ?, ?)
     `);
-    const result = stmt.run(name, email.toLowerCase().trim(), hash);
+    const result = stmt.run(name, email.toLowerCase().trim(), hash, role);
     return User.findById(result.lastInsertRowid);
   },
 

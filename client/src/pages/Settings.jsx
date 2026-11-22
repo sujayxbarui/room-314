@@ -16,7 +16,9 @@ import {
   Laptop,
   CheckCircle,
   AlertTriangle,
+  Lock,
 } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
 import { api } from '../services/api';
 import Button from '../components/ui/Button';
 import Input from '../components/ui/Input';
@@ -24,6 +26,7 @@ import Modal from '../components/ui/Modal';
 import Spinner from '../components/ui/Spinner';
 
 export default function Settings() {
+  const { isAdmin } = useAuth();
   const [activeSection, setActiveSection] = useState('shop'); // 'shop' | 'categories' | 'ai' | 'users' | 'backup'
   const [loading, setLoading] = useState(false);
 
@@ -265,6 +268,18 @@ export default function Settings() {
           );
         })}
       </div>
+
+      {!isAdmin && (
+        <div className="bg-amber-50 border border-amber-300 rounded-lg p-4 text-amber-900 text-sm flex items-start gap-3">
+          <Lock className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
+          <div>
+            <h4 className="font-semibold">Staff Mode — View Only Access</h4>
+            <p className="text-xs text-amber-800 mt-0.5">
+              You are signed in with the Staff Cashier account. Store parameters, categories, Gemini API keys, data resets, and database imports are restricted to Store Administrators.
+            </p>
+          </div>
+        </div>
+      )}
 
       {/* SECTION 1: SHOP & RECEIPT SETTINGS */}
       {activeSection === 'shop' && (

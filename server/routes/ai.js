@@ -6,7 +6,7 @@ const db = require('../db');
 const config = require('../config');
 const { extractFromScreenshot, getApiKey } = require('../services/aiExtraction');
 const { suggestCategory } = require('../services/categorization');
-const { authenticate } = require('../middleware/auth');
+const { authenticate, requireAdmin } = require('../middleware/auth');
 
 const router = express.Router();
 router.use(authenticate);
@@ -20,8 +20,8 @@ router.get('/status', (req, res) => {
   });
 });
 
-// POST /api/ai/set-key - save Gemini API key from UI
-router.post('/set-key', (req, res, next) => {
+// POST /api/ai/set-key - save Gemini API key from UI (Admin only)
+router.post('/set-key', requireAdmin, (req, res, next) => {
   try {
     const { api_key } = req.body;
     if (!api_key || typeof api_key !== 'string' || !api_key.trim()) {
@@ -95,8 +95,8 @@ const upload = multer({
   },
 });
 
-// POST /api/ai/extract-screenshot - upload screenshot and extract products
-router.post('/extract-screenshot', upload.single('screenshot'), async (req, res, next) => {
+// POST /api/ai/extract-screenshot - upload screenshot and extract products (Admin only)
+router.post('/extract-screenshot', requireAdmin, upload.single('screenshot'), async (req, res, next) => {
   try {
     if (!req.file) {
       return res.status(400).json({ error: 'Screenshot image file is required' });
