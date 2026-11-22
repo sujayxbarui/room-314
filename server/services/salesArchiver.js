@@ -4,7 +4,8 @@ const os = require('os');
 const db = require('../db');
 
 // Main workspace sales_records folder
-const projectSalesDir = path.resolve(__dirname, '../../sales_records');
+const isVercel = Boolean(process.env.VERCEL);
+const projectSalesDir = isVercel ? '/tmp/sales_records' : path.resolve(__dirname, '../../sales_records');
 // User app support sales_records folder (persists in packaged macOS app)
 const appSupportSalesDir = path.join(os.homedir(), 'Library/Application Support/Room-314/sales_records');
 

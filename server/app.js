@@ -126,8 +126,8 @@ function gracefulShutdown() {
 process.on('SIGTERM', gracefulShutdown);
 process.on('SIGINT', gracefulShutdown);
 
-// Start server
-if (process.env.NODE_ENV !== 'test') {
+// Start server only when run directly as the main process (not when required by Vercel serverless)
+if (require.main === module && process.env.NODE_ENV !== 'test' && !process.env.VERCEL) {
   app.listen(config.port, () => {
     console.log(`===============================================`);
     console.log(`🏪 Room-314 POS Server running on port ${config.port}`);
